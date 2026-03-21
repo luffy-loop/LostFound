@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lost & Found</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>Lost & Found</h2>
+    <div>
+        <select onchange="setTheme(this.value)">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+        <button onclick="goToMyPosts()">My Posts</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>Lost Something?</h1>
+    <p>Find it or help someone get it back</p>
+</div>
+
+<div class="controls">
+    <input id="search" placeholder="Search items..." onkeyup="displayItems()">
+</div>
+
+<div id="itemsContainer" class="grid"></div>
+
+<button class="fab" onclick="goToPost()">+</button>
+
+<div id="modal" onclick="this.style.display='none'">
+    <img id="modalImg">
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

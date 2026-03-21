@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post Item</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>Post Item</h2>
+    <button onclick="goHome()">Home</button>
+</nav>
+
+<div class="post-container">
+<div class="post-card">
+
+<h2>Post Lost / Found Item</h2>
+
+<input id="itemName" placeholder="Item Name">
+<textarea id="description" placeholder="Description"></textarea>
+<input id="location" placeholder="Where was it lost/found?">
+
+<select id="type">
+    <option>Lost</option>
+    <option>Found</option>
+</select>
+
+<input id="category" placeholder="Category (Bag, Keys, etc)">
+
+<input type="file" id="image" onchange="previewImage()">
+<img id="preview">
+
+<label><input type="checkbox" id="urgent"> Urgent</label>
+
+<button onclick="addItem()">Submit</button>
+
+</div>
+</div>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <h3 id="popupMsg"></h3>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
