@@ -1,4 +1,3 @@
-/* ================= RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +10,6 @@ body {
     color: #111;
 }
 
-/* ================= NAV ================= */
 nav {
     display: flex;
     justify-content: space-between;
@@ -31,7 +29,6 @@ nav button, nav select {
     cursor: pointer;
 }
 
-/* ================= HERO ================= */
 .hero {
     text-align: center;
     padding: 50px 20px 30px;
@@ -45,7 +42,6 @@ nav button, nav select {
     color: #666;
 }
 
-/* ================= SEARCH ================= */
 .controls {
     display: flex;
     justify-content: center;
@@ -59,7 +55,6 @@ nav button, nav select {
     border: 1px solid #ddd;
 }
 
-/* ================= GRID ================= */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -67,15 +62,11 @@ nav button, nav select {
     padding: 20px 40px;
 }
 
-/* ================= CARD ================= */
 .item {
     background: white;
     padding: 14px;
     border-radius: 14px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
     transition: 0.2s;
 }
 
@@ -83,50 +74,67 @@ nav button, nav select {
     transform: translateY(-4px);
 }
 
-.item img {
-    width: 100%;
+.img-box {
     height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.img-box img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
 }
 
 .item h3 {
     font-size: 16px;
+    font-weight: 600;
 }
 
-.item p {
+.desc {
     font-size: 12px;
     color: #555;
 }
 
-.meta {
-    font-size: 12px;
-    color: #777;
-}
-
 .location {
+    font-size: 13px;
     font-weight: 600;
     color: #007bff;
 }
 
-.urgent {
-    font-size: 11px;
-    background: #ffe5e5;
-    color: red;
-    padding: 4px 8px;
-    border-radius: 6px;
-    width: fit-content;
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #777;
 }
 
-.item select,
-.item input {
+.posted {
+    font-size: 11px;
+    color: #999;
+}
+
+.item select {
+    margin-top: 6px;
     padding: 6px;
     border-radius: 6px;
     border: 1px solid #ddd;
-    font-size: 12px;
 }
 
-/* ================= POST PAGE ================= */
+.item input {
+    margin-top: 6px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
 .post-container {
     display: flex;
     justify-content: center;
@@ -159,7 +167,6 @@ nav button, nav select {
     border-radius: 8px;
 }
 
-/* ================= LOGIN ================= */
 .login-page {
     height: 100vh;
     background: url("./klh.png") center/cover no-repeat;
@@ -205,7 +212,6 @@ nav button, nav select {
     border-radius: 8px;
 }
 
-/* ================= FAB ================= */
 .fab {
     position: fixed;
     bottom: 30px;
@@ -219,7 +225,20 @@ nav button, nav select {
     border: none;
 }
 
-/* ================= POPUP ================= */
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+}
+
+#modal img {
+    max-width: 80%;
+    border-radius: 12px;
+}
+
 .popup {
     position: fixed;
     inset: 0;
@@ -234,40 +253,4 @@ nav button, nav select {
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-}
-
-/* IMAGE CONTAINER */
-.img-box {
-    width: 100%;
-    height: 140px;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-/* IMAGE */
-.img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: 0.3s;
-}
-
-.img-box img:hover {
-    transform: scale(1.05);
-}
-
-/* CONTENT AREA */
-.content {
-    padding-top: 8px;
-}
-
-/* TITLE FIX */
-.item h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.item {
-    overflow: hidden;
 }
