@@ -1,18 +1,1 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Posts</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<nav>
-    <h2>My Posts</h2>
-    <button onclick="goHome()">Home</button>
-</nav>
-
-<div id="itemsContainer" class="grid"></div>
-
-<script src="script.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Posts | LostFound</title><link rel="stylesheet" href="style.css"></head><body><nav class="nav"><a class="brand" href="index.html"><span>LF</span><div>LostFound<small>Campus community</small></div></a><div class="nav-actions"><button class="ghost" onclick="goHome()">Home</button><button class="primary small" onclick="goToPost()">Post Item</button></div></nav><main><section class="page-title"><div><p class="eyebrow">YOUR ACTIVITY</p><h1>My posts</h1><p>Manage the reports you have submitted.</p></div></section><section id="itemsContainer" class="grid"></section></main><div id="modal" class="modal" onclick="closeModal()"><div class="modal-card" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><img id="modalImg" alt="Item preview"></div></div><div id="toast" class="toast"></div><script src="script.js"></script></body></html>
