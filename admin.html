@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Moderation & Insights | LostFound</title><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/features.css"></head>
+<body>
+<nav class="nav"><a class="brand" href="index.html"><span>LF</span><div>LostFound<small>Campus community</small></div></a><div class="nav-actions"><a class="ghost" href="index.html">Board</a><a class="ghost" href="notifications.html">Notifications</a><a class="ghost" href="myposts.html">My Posts</a><button class="ghost" id="logoutBtn">Logout</button></div></nav>
+<main>
+<section class="page-title"><div><p class="eyebrow">CAMPUS OPERATIONS</p><h1>Moderation &amp; insights</h1><p>Review flagged reports and understand how the community is using LostFound.</p></div></section>
+<section class="demo-banner"><strong>Prototype moderation dashboard</strong><span>This demo stores reports in this browser only. It is not a secure administrator console. Use server-side roles and shared storage before handling real campus reports.</span></section>
+<section id="analytics" class="analytics-grid"></section>
+<section class="section-head"><div><p class="eyebrow">SAFETY QUEUE</p><h2>Reported posts</h2></div><span id="reportCount" class="muted"></span></section>
+<section id="moderationQueue" class="moderation-list"></section>
+<section class="section-head insights-heading"><div><p class="eyebrow">CAMPUS TRENDS</p><h2>Popular locations</h2></div></section>
+<section id="locationInsights" class="location-insights"></section>
+</main><div id="detailsModal" class="modal"><div class="details-card"><button class="modal-close" data-close aria-label="Close details">×</button><div id="detailsContent"></div></div></div><div id="toast" class="toast" role="status" aria-live="polite"></div><script type="module" src="js/app.js"></script>
+</body></html>

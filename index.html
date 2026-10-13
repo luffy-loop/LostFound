@@ -1,6 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LostFound | Campus Community</title><link rel="stylesheet" href="css/style.css"></head><body>
-<nav class="nav"><a class="brand" href="index.html"><span>LF</span><div>LostFound<small>Campus community</small></div></a><div class="nav-actions"><button class="ghost" id="themeBtn">Theme</button><a class="ghost" href="myposts.html">My Posts</a><a class="primary small" href="post.html">Post Item</a><button class="ghost" id="logoutBtn">Logout</button></div></nav>
-<main><section class="hero"><div><p class="eyebrow">CAMPUS LOST & FOUND</p><h1>Lost something?<br><strong>Let's get it back.</strong></h1><p class="hero-copy">Report lost items, share found belongings, and help return them safely to their owners.</p><div class="hero-actions"><a class="primary" href="post.html">Report an item</a><a class="secondary" href="#reports">Browse reports</a></div></div><div class="hero-card"><div class="stat"><strong id="totalCount">0</strong><span>Items posted</span></div><div class="stat"><strong id="activeCount">0</strong><span>Still searching</span></div><div class="stat"><strong id="returnedCount">0</strong><span>Returned</span></div></div></section>
-<section class="toolbar" id="reports"><input id="search" placeholder="Search item, location or category..."><select id="typeFilter"><option value="All">All items</option><option>Lost</option><option>Found</option></select><select id="categoryFilter"><option value="All">All categories</option></select><select id="statusFilter"><option value="All">All statuses</option><option>Searching</option><option>Contacted</option><option>Submitted</option><option>Returned</option></select><select id="sortFilter"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="urgent">Urgent first</option></select></section>
-<section class="section-head"><div><p class="eyebrow">COMMUNITY BOARD</p><h2>Recent reports</h2></div><span id="resultCount" class="muted"></span></section><section id="itemsContainer" class="grid"></section></main>
-<div id="detailsModal" class="modal"><div class="details-card"><button class="modal-close" data-close>×</button><div id="detailsContent"></div></div></div><div id="toast" class="toast"></div><script type="module" src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LostFound | Campus Community</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="index.html"><span>LF</span><div>LostFound<small>Campus community</small></div></a>
+    <div class="nav-actions">
+      <button class="ghost" id="themeBtn">Theme</button>
+      <a class="ghost" href="notifications.html">Notifications <span id="notificationBadge" class="notification-badge" hidden>0</span></a>
+      <a class="ghost" href="myposts.html">My Posts</a>
+      <a class="ghost" href="admin.html">Moderation</a>
+      <a class="primary small" href="post.html">Post Item</a>
+      <button class="ghost" id="logoutBtn">Logout</button>
+    </div>
+  </nav>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">CAMPUS LOST &amp; FOUND</p><h1>Lost something?<br><strong>Let's get it back.</strong></h1><p class="hero-copy">Report lost items, share found belongings, and help return them safely to their owners.</p><div class="hero-actions"><a class="primary" href="post.html">Report an item</a><a class="secondary" href="#reports">Browse reports</a></div></div>
+      <div class="hero-card"><div class="stat"><strong id="totalCount">0</strong><span>Items posted</span></div><div class="stat"><strong id="activeCount">0</strong><span>Still searching</span></div><div class="stat"><strong id="returnedCount">0</strong><span>Returned</span></div></div>
+    </section>
+    <section class="toolbar" id="reports">
+      <input id="search" placeholder="Search item, description or category..." aria-label="Search reports">
+      <select id="typeFilter" aria-label="Report type"><option value="All">All items</option><option>Lost</option><option>Found</option></select>
+      <select id="categoryFilter" aria-label="Category"><option value="All">All categories</option></select>
+      <select id="statusFilter" aria-label="Status"><option value="All">All statuses</option><option>Searching</option><option>Contacted</option><option>Submitted</option><option>Returned</option></select>
+      <select id="locationFilter" aria-label="Campus location"><option value="All">All locations</option></select>
+      <select id="sortFilter" aria-label="Sort reports"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="urgent">Urgent first</option><option value="matches">Best matches first</option></select>
+      <label class="date-filter">From date<input id="fromDate" type="date"></label>
+      <label class="date-filter">To date<input id="toDate" type="date"></label>
+    </section>
+    <section class="section-head"><div><p class="eyebrow">COMMUNITY BOARD</p><h2>Recent reports</h2></div><span id="resultCount" class="muted"></span></section>
+    <section id="itemsContainer" class="grid"></section>
+    <section class="feature-note"><strong>Recover items safely</strong><span>Use the claim workflow for found items and keep private identifying details out of public posts.</span><a href="admin.html">View campus moderation &amp; insights →</a></section>
+  </main>
+  <div id="detailsModal" class="modal"><div class="details-card"><button class="modal-close" data-close aria-label="Close details">×</button><div id="detailsContent"></div></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
