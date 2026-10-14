@@ -1,3 +1,4 @@
+import { archiveStaleItems, scoreMatch } from "./enhancements.js";
 const KEY = "items";
 const REPORTS_KEY = "reportedItems";
 const NOTIFICATIONS_KEY = "lfNotifications";
@@ -22,7 +23,8 @@ function notify(user, type, title, message, itemId) {
 }
 function normalizeStatus(status) { return status === "Office" ? "Submitted" : statuses.includes(status) ? status : "Searching"; }
 function migrateItems() {
-  const items = getItems().map(item => ({ ...item, status: normalizeStatus(item.status), comments: Array.isArray(item.comments) ? item.comments : [], claims: Array.isArray(item.claims) ? item.claims : [], hidden: Boolean(item.hidden), occurredAt: item.occurredAt || "" }));
+  const normalized = getItems().map(item => ({ ...item, status: normalizeStatus(item.status), comments: Array.isArray(item.comments) ? item.comments : [], claims: Array.isArray(item.claims) ? item.claims : [], hidden: Boolean(item.hidden), archived: Boolean(item.archived), occurredAt: item.occurredAt || "" }));
+  const items = archiveStaleItems(normalized);
   saveItems(items);
   return items;
 }
@@ -134,22 +136,17 @@ function markAllNotificationsRead(user) {
 }
 function getMatches(item, limit = 3) {
   if (!item) return [];
-  const words = value => new Set(String(value || "").toLowerCase().split(/[^a-z0-9]+/).filter(word => word.length > 2));
-  const itemWords = words(item.itemName + " " + item.description);
-  return migrateItems().filter(other => String(other.id) !== String(item.id) && !other.hidden && other.type !== item.type).map(other => {
-    const otherWords = words(other.itemName + " " + other.description);
-    let score = other.category === item.category ? 3 : 0;
-    if (other.location.toLowerCase() === item.location.toLowerCase()) score += 2;
-    for (const word of itemWords) if (otherWords.has(word)) score += 1;
-    return { ...other, matchScore: score };
-  }).filter(other => other.matchScore > 0).sort((a, b) => b.matchScore - a.matchScore || new Date(b.createdAt) - new Date(a.createdAt)).slice(0, limit);
+  return migrateItems().filter(other => String(other.id) !== String(item.id) && !other.hidden && !other.archived && other.type !== item.type).map(other => ({
+    ...other, matchScore: scoreMatch(item, other)
+  })).filter(other => other.matchScore > 0).sort((a, b) => b.matchScore - a.matchScore || new Date(b.createdAt) - new Date(a.createdAt)).slice(0, limit);
 }
 function getAnalytics() {
   const items = migrateItems(), reports = getReports().filter(report => !report.resolved), locations = {};
-  items.filter(item => !item.hidden).forEach(item => { const key = item.location || "Unspecified"; locations[key] = (locations[key] || 0) + 1; });
+  items.filter(item => !item.hidden && !item.archived).forEach(item => { const key = item.location || "Unspecified"; locations[key] = (locations[key] || 0) + 1; });
   return {
-    total: items.length, lost: items.filter(item => item.type === "Lost" && !item.hidden).length,
-    found: items.filter(item => item.type === "Found" && !item.hidden).length,
+    total: items.filter(item => !item.hidden && !item.archived).length,
+    lost: items.filter(item => item.type === "Lost" && !item.hidden && !item.archived).length,
+    found: items.filter(item => item.type === "Found" && !item.hidden && !item.archived).length,
     returned: items.filter(item => item.status === "Returned" && !item.hidden).length,
     pendingClaims: items.reduce((sum, item) => sum + (item.claims || []).filter(claim => claim.status === "Pending").length, 0),
     openReports: reports.length, locations: Object.entries(locations).sort((a, b) => b[1] - a[1])

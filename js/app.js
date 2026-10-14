@@ -5,6 +5,7 @@ import {
   getMessages, getUserNotifications, markNotificationRead, markAllNotificationsRead, getMatches, getAnalytics
 } from "./posts.js";
 import { esc, toast, theme, initTheme, closeDetails, openDetails } from "./ui.js";
+import { createQrCode } from "./enhancements.js";
 
 Auth.require();
 initTheme();
@@ -80,7 +81,7 @@ function initBoard(onlyMine) {
   }
   const render = () => {
     const all = getItems();
-    let items = all.filter(item => !item.hidden);
+    let items = all.filter(item => !item.hidden && (!item.archived || onlyMine));
     if (onlyMine) items = items.filter(item => item.roll === Auth.getUser());
     const query = (search?.value || "").toLowerCase().trim();
     items = items.filter(item =>
@@ -96,8 +97,8 @@ function initBoard(onlyMine) {
     else if (sort?.value === "urgent") items.sort((a, b) => Number(b.urgent) - Number(a.urgent) || new Date(b.createdAt) - new Date(a.createdAt));
     else if (sort?.value === "matches" && query) items.sort((a, b) => matchScore(b, query) - matchScore(a, query));
     else items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    document.getElementById("totalCount")?.replaceChildren(String(all.filter(item => !item.hidden).length));
-    document.getElementById("activeCount")?.replaceChildren(String(all.filter(item => !item.hidden && item.status === "Searching").length));
+    document.getElementById("totalCount")?.replaceChildren(String(all.filter(item => !item.hidden && !item.archived).length));
+    document.getElementById("activeCount")?.replaceChildren(String(all.filter(item => !item.hidden && !item.archived && item.status === "Searching").length));
     document.getElementById("returnedCount")?.replaceChildren(String(all.filter(item => !item.hidden && item.status === "Returned").length));
     const result = document.getElementById("resultCount");
     if (result) result.textContent = items.length + " report" + (items.length === 1 ? "" : "s");
@@ -106,7 +107,7 @@ function initBoard(onlyMine) {
   const card = item => {
     const mine = item.roll === Auth.getUser();
     return '<article class="item">' + (item.image ? '<div class="img-box"><img src="' + esc(item.image) + '" alt="' + esc(item.itemName) + '"></div>' : "") +
-      '<div class="card-body"><div class="card-top"><span class="badge ' + item.type.toLowerCase() + '">' + esc(item.type) + '</span>' + (item.urgent ? '<span class="badge urgent">Urgent</span>' : "") +
+      '<div class="card-body"><div class="card-top"><span class="badge ' + item.type.toLowerCase() + '">' + esc(item.type) + '</span>' + (item.archived ? '<span class="badge">Archived</span>' : "") + (item.urgent ? '<span class="badge urgent">Urgent</span>' : "") +
       '</div><h3>' + esc(item.itemName) + '</h3><p class="location">⌖ ' + esc(item.location) + '</p><p class="desc">' + esc(item.description) + '</p>' +
       '<div class="meta-row"><span>' + esc(item.category) + '</span><span class="badge status-pill">' + esc(item.status) + '</span></div>' +
       '<p class="posted">Campus user · ' + new Date(item.createdAt).toLocaleDateString() + (item.occurredAt ? ' · Event date ' + esc(item.occurredAt) : "") + '</p></div>' +
@@ -154,7 +155,7 @@ function showDetails(id) {
     '<section class="detail-section"><h3>Comments</h3><div class="detail-comments">' + (comments.length ? comments.map(comment => '<div class="detail-comment"><strong>Campus user</strong> ' + esc(comment.text) + '</div>').join("") : '<span class="muted">No comments yet.</span>') + '</div><input class="comment-input" id="detailComment" maxlength="300" placeholder="Add a public comment and press Enter"></section>' +
     (!mine && item.type === "Found" ? '<section class="detail-section"><h3>Claim this item</h3><p class="muted">Describe a private identifying detail to help the finder verify ownership. Do not enter passwords, ID numbers, or contact details.</p><textarea id="claimProof" maxlength="300" placeholder="A detail only the owner would know"></textarea><button class="secondary full" id="submitClaim">Submit claim</button></section>' : "") +
     (claimHistory ? '<section class="detail-section"><h3>Claim history</h3>' + claimHistory + '</section>' : "") + messageSection +
-    '<div class="detail-actions">' + (mine ? '<button class="secondary" id="advanceStatus">Advance status</button>' : "") + '<button class="ghost" id="shareItem">Copy share link</button>' + (!mine ? '<button class="ghost" id="reportItem">Report post</button>' : "") + '</div></div></div>');
+    '<div class="detail-actions">' + (mine && !item.archived ? '<button class="secondary" id="advanceStatus">Advance status</button>' : "") + '<button class="ghost" id="shareItem">Copy share link</button><button class="ghost" id="generateQr">Show QR code</button>' + (!mine ? '<button class="ghost" id="reportItem">Report post</button>' : "") + '</div><div id="shareQr" class="share-qr" hidden></div></div></div>');
   document.getElementById("detailComment")?.addEventListener("keydown", event => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -184,10 +185,16 @@ function showDetails(id) {
     if (reportPost(id, user, reason)) { updateNotificationBadge(); toast("Report sent for moderation"); }
     else toast("You cannot report your own post or duplicate an open report");
   });
+  const shareUrl = new URL("index.html?item=" + encodeURIComponent(id), location.href).href;
   document.getElementById("shareItem")?.addEventListener("click", async () => {
-    const shareUrl = new URL("index.html?item=" + encodeURIComponent(id), location.href).href;
     try { await navigator.clipboard.writeText(shareUrl); toast("Share link copied"); }
     catch { prompt("Copy this share link", shareUrl); }
+  });
+  document.getElementById("generateQr")?.addEventListener("click", async () => {
+    const target = document.getElementById("shareQr");
+    target.hidden = false;
+    try { await createQrCode(target, shareUrl); toast("QR code ready to scan"); }
+    catch { target.textContent = "QR generation needs an internet connection. Use Copy share link instead."; }
   });
 }
 function initNotifications() {
